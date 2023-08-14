@@ -34,8 +34,10 @@ export default function ButtonElement(props) {
       >
       </circle>
       <element:node
-        x="40"
-        y="20"
+        x="${40}"
+        y="${20}"
+        parent=${props}
+        source="${true}"
         active=${active}
       >
       </element:node>
