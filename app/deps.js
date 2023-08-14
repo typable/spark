@@ -10,6 +10,7 @@ import NodeElement from './elements/node.element.js';
 import WireElement from "./elements/wire.element.js";
 import SwitchElement from './elements/switch.element.js';
 import ButtonElement from "./elements/button.element.js";
+import ClockElement from "./elements/clock.element.js";
 import LampElement from "./elements/lamp.element.js";
 
 const { dict } = figure(React.createElement);
@@ -28,7 +29,8 @@ const html = dict({
     wire: WireElement,
     switch: SwitchElement,
     button: ButtonElement,
-    lamp: LampElement
+    clock: ClockElement,
+    lamp: LampElement,
   },
 });
 

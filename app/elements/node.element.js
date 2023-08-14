@@ -1,11 +1,34 @@
 // @ts-check
 
-import { React, html } from '../deps.js';
+import { React, global, html } from '../deps.js';
 
-const { useState, useEffect } = React;
+const { useState, useEffect, useContext } = React;
 
 export default function NodeElement(props) {
+  const { wires, setWires, node, setNode } = useContext(global);
   const [active, setActive] = useState(props?.active ?? false);
+
+  function doWire() {
+    if (!node) {
+      setNode(props);
+      return;
+    }
+    const start = node;
+    const end = props;
+    if (start.parent) {
+      start.x += start.parent.x;
+      start.y += start.parent.y;
+    }
+    if (end.parent) {
+      end.x += end.parent.x;
+      end.y += end.parent.y;
+    }
+    setWires([
+      ...wires,
+      { start, end },
+    ])
+    setNode(null);
+  }
 
   useEffect(() => {
     setActive(props?.active ?? false);
@@ -19,7 +42,7 @@ export default function NodeElement(props) {
       fill=${active ? 'black' : 'white'}
       stroke="black"
       stroke-width="1"
-      on:click=${() => setActive(!active)}
+      on:click=${doWire}
     >
     </circle>
   `;

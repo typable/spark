@@ -18,8 +18,9 @@ export default function ButtonElement(props) {
         fill="#CCC"
         stroke="black"
         stroke-width="1"
-        on:mousedown=${() => setActive(true)}
-        on:mouseup=${() => setActive(false)}
+        on:pointerdown=${() => setActive(true)}
+        on:pointerup=${() => setActive(false)}
+        on:pointerleave=${() => setActive(false)}
       >
       </rect>
       <circle
@@ -33,8 +34,10 @@ export default function ButtonElement(props) {
       >
       </circle>
       <element:node
-        x="40"
-        y="20"
+        x="${40}"
+        y="${20}"
+        parent=${props}
+        source="${true}"
         active=${active}
       >
       </element:node>

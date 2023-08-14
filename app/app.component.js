@@ -5,22 +5,28 @@ import { React, html } from './deps.js';
 const { useState, useRef } = React;
 
 export default function AppComponent() {
-  const context = {};
-
-  const n1 = createNode(Math.ceil(360 / 20) * 20, Math.ceil(360 / 20) * 20);
-  const n2 = createNode(Math.ceil(400 / 20) * 20, Math.ceil(440 / 20) * 20);
+  const n1 = createNode(360, 360);
+  const n2 = createNode(400, 440);
 
   const e1 = createElement('switch', 220, 220);
   const e2 = createElement('button', 220, 280);
-
-  const w1 = createWire(n1, n2);
+  const e3 = createElement('clock', 220, 340);
   
-  const elements = [e1, e2];
-  const wires = [w1];
+  const elements = [e1, e2, e3];
+  const [wires, setWires] = useState([]);
 
   const [nodes, setNodes] = useState([n1, n2]);
   const canvasRef = useRef();
 
+  const [node, setNode] = useState(null);
+
+  const context = {
+    wires,
+    setWires,
+    node,
+    setNode,
+  };
+  
   function doCreate(event) {
     // if (event.target !== canvasRef.current) {
     //   return;
@@ -51,6 +57,10 @@ export default function AppComponent() {
                 return html`
                   <element:button $props=${element}></element:button>
                 `;
+              case 'clock':
+                return html`
+                  <element:clock $props=${element}></element:clock>
+                `;
             }
           })}
           <element:lamp x="220" y="340"></element:lamp>
@@ -65,10 +75,6 @@ export default function AppComponent() {
 
 function createNode(x, y) {
   return { x, y };
-}
-
-function createWire(start, end) {
-  return { start, end };
 }
 
 function createElement(type, x, y) {
