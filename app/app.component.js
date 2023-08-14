@@ -7,8 +7,8 @@ const { useState, useRef } = React;
 export default function AppComponent() {
   const context = {};
 
-  const n1 = createNode(360, 360);
-  const n2 = createNode(400, 440);
+  const n1 = createNode(Math.ceil(360 / 20) * 20, Math.ceil(360 / 20) * 20);
+  const n2 = createNode(Math.ceil(400 / 20) * 20, Math.ceil(440 / 20) * 20);
 
   const e1 = createElement('switch', 220, 220);
   const e2 = createElement('button', 220, 280);
@@ -53,6 +53,7 @@ export default function AppComponent() {
                 `;
             }
           })}
+          <element:lamp x="220" y="340"></element:lamp>
           ${nodes.map((node) => html`
             <element:node $props=${node}></element:node>
           `)}

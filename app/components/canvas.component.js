@@ -2,11 +2,16 @@
 
 import { React, html } from '../deps.js';
 
-const { forwardRef } = React;
+const { forwardRef, useState } = React;
 
 export default forwardRef(function CanvasComponent(props, ref) {
+  const [active, setActive] = useState(false);
+
   return html`
-    <app-canvas $props=${props}>
+    <app-canvas
+      $props=${props}
+      on:click=${() => setActive(!active)}
+    >
       <svg>
         <pattern
           id="pattern-circles"
@@ -25,13 +30,33 @@ export default forwardRef(function CanvasComponent(props, ref) {
           >
           </circle>
         </pattern>
+        <pattern
+          id="pattern-rects"
+          x="0"
+          y="0"
+          width="20"
+          height="20"
+          patternUnits="userSpaceOnUse"
+          patternContentUnits="userSpaceOnUse"
+        >
+          <rect
+            x="0"
+            y="0"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="#DDD"
+            stroke-width="2"
+          >
+          </rect>
+        </pattern>
         <rect
           ref=${ref}
           x="0"
           y="0"
           width="100%"
           height="100%"
-          fill="url(#pattern-circles)"
+          fill="url(#pattern-${active ? 'circles' : 'rects' })"
         >
         </rect>
         ${props?.children}
