@@ -10,8 +10,9 @@ export default function AppComponent() {
 
   const e1 = createElement('switch', 220, 220);
   const e2 = createElement('button', 220, 280);
+  const e3 = createElement('clock', 220, 340);
   
-  const elements = [e1, e2];
+  const elements = [e1, e2, e3];
   const [wires, setWires] = useState([]);
 
   const [nodes, setNodes] = useState([n1, n2]);
@@ -55,6 +56,10 @@ export default function AppComponent() {
               case 'button':
                 return html`
                   <element:button $props=${element}></element:button>
+                `;
+              case 'clock':
+                return html`
+                  <element:clock $props=${element}></element:clock>
                 `;
             }
           })}
