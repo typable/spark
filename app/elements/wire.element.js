@@ -1,14 +1,8 @@
 // @ts-check
 
-import { React, html } from '../deps.js';
-
-const { useEffect } = React;
+import { html } from '../deps.js';
 
 export default function WireElement(props) {
-
-  useEffect(() => {
-    console.log(props.start, props.end);
-  }, [props.start, props.end]);
 
   function evalPath() {
     const { start, end } = props ?? {};

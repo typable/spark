@@ -5,9 +5,6 @@ import { React, html } from './deps.js';
 const { useState, useRef } = React;
 
 export default function AppComponent() {
-  const n1 = createNode(360, 360);
-  const n2 = createNode(400, 440);
-
   const e1 = createElement('switch', 220, 220);
   const e2 = createElement('button', 220, 280);
   const e3 = createElement('clock', 220, 340);
@@ -15,7 +12,7 @@ export default function AppComponent() {
   const elements = [e1, e2, e3];
   const [wires, setWires] = useState([]);
 
-  const [nodes, setNodes] = useState([n1, n2]);
+  const [nodes, setNodes] = useState([]);
   const canvasRef = useRef();
 
   const [node, setNode] = useState(null);
@@ -28,16 +25,16 @@ export default function AppComponent() {
   };
   
   function doCreate(event) {
-    // if (event.target !== canvasRef.current) {
-    //   return;
-    // }
-    // const bounds = event.target.getBoundingClientRect();
-    // const x = event.clientX - bounds.left;
-    // const y = event.clientY - bounds.top;
-    // setNodes([
-    //   ...nodes,
-    //   createNode(x, y),
-    // ]);
+    if (event.target !== canvasRef.current.viewRef.current) {
+      return;
+    }
+    const bounds = event.target.getBoundingClientRect();
+    const x = event.clientX - bounds.left - canvasRef.current.origin.x;
+    const y = event.clientY - bounds.top - canvasRef.current.origin.y;
+    setNodes([
+      ...nodes,
+      createNode(x, y),
+    ]);
   }
 
   return html`

@@ -2,7 +2,7 @@
 
 import { React, html } from '../deps.js';
 
-const { forwardRef, useState } = React;
+const { forwardRef, useState, useRef, useImperativeHandle } = React;
 
 const SIZE = 20;
 
@@ -10,6 +10,7 @@ export default forwardRef(function CanvasComponent(props, ref) {
   const [zoom, setZoom] = useState(1);
   const [origin, setOrigin] = useState({ x: 0, y: 0 });
   const [pointer, setPointer] = useState(null);
+  const viewRef = useRef(null);
 
   function onPointerDown(event) {
     if (event.button === 1) {
@@ -31,12 +32,19 @@ export default forwardRef(function CanvasComponent(props, ref) {
 
   function onPointerMove(event) {
     if (pointer) {
-      const bounds = ref.current.getBoundingClientRect();
+      const bounds = viewRef.current.getBoundingClientRect();
       const x = event.clientX - bounds.x - pointer.dx;
       const y = event.clientY - bounds.y - pointer.dy;
       setOrigin({ x, y });
     }
   }
+
+  useImperativeHandle(ref, () => {
+    return {
+      origin,
+      viewRef,
+    };
+  }, [viewRef, origin]);
 
   return html`
     <app-canvas
@@ -66,7 +74,7 @@ export default forwardRef(function CanvasComponent(props, ref) {
             </circle>
           </pattern>
           <rect
-            ref=${ref}
+            ref=${viewRef}
             x="0"
             y="0"
             width="100%"
