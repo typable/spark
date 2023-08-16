@@ -32,4 +32,27 @@ const html = dict({
   },
 });
 
-export { html, global, React, ReactDOM };
+// [1-9|A-Z] | 35
+const len = 35;
+const min = 49;
+const max = 65;
+const pos = 9;
+
+function uid() {
+  const uids = [];
+  let attempts = 0;
+  while (attempts < 50) {
+    const uid = Array.from({ length: 4 }, function() {
+      const rand = Math.floor(Math.random() * len);
+      return String.fromCharCode(rand < pos ? min + rand : max + rand - pos);
+    }).join('');
+    attempts++;
+    if (!uids.includes(uid)) {
+      uids.push(uid);
+      return uid;
+    }
+  }
+  throw 'Took too many attempts to create uid!';
+}
+
+export { html, global, React, ReactDOM, uid };

@@ -1,19 +1,21 @@
 // @ts-check
 
-import { React, global, html } from '../deps.js';
+import { React, global, html, uid } from '../deps.js';
+import { useEffectOnce } from '../hooks.js';
 
 const { useState, useEffect, useContext } = React;
 
 export default function NodeElement(props) {
-  const [id, setId] = useState(new Date().getTime());
-  const { wires, setWires, node, setNode } = useContext(global);
-  const [active, setActive] = useState(props?.active ?? false);
+  const [id] = useState(() => uid());
+  const { state, dispatch, wires, setWires, node, setNode } = useContext(global);
+
+  useEffectOnce(() => {
+    dispatch({ type: 'create', id });
+  });
 
   useEffect(() => {
-    if (props?.source) {
-      console.log(id, active);
-    }
-  }, [active]);
+    dispatch({ type: 'update', id, active: props?.active ?? false });
+  }, [props?.active]);
 
   function doWire() {
     if (!node) {
@@ -37,20 +39,28 @@ export default function NodeElement(props) {
     setWires([
       ...wires,
       { start, end },
-    ])
+    ]);
+    dispatch({ type: 'connect', id: id, target: node.id });
+    dispatch({ type: 'connect', id: node.id, target: id });
     setNode(null);
   }
 
-  useEffect(() => {
-    setActive(props?.active ?? false);
-  }, [props?.active]);
+  function isActive() {
+    if (props?.source) {
+      return props?.active ?? false;
+    }
+    if (state.nodes[id] === undefined) {
+      return false;
+    }
+    return Object.values(state.nodes[id].conns).some((active) => active);
+  }
 
   return html`
     <circle
       cx=${props?.x ?? 0}
       cy=${props?.y ?? 0}
       r="4"
-      fill=${active ? 'black' : 'white'}
+      fill=${isActive() ? 'black' : 'white'}
       stroke="black"
       stroke-width="1"
       on:click=${doWire}

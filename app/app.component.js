@@ -2,7 +2,7 @@
 
 import { React, html } from './deps.js';
 
-const { useState, useRef } = React;
+const { useState, useRef, useReducer } = React;
 
 export default function AppComponent() {
   const e1 = createElement('switch', 220, 220);
@@ -17,7 +17,33 @@ export default function AppComponent() {
 
   const [node, setNode] = useState(null);
 
+  function reduce(state, action) {
+    if (action.type === 'create') {
+      if (!state.nodes[action.id]) {
+        state.nodes[action.id] = { conns: {} };
+      }
+      return { ...state };
+    }
+    if (action.type === 'connect') {
+      if (!Object.keys(state.nodes[action.id].conns).includes(action.target)) {
+        state.nodes[action.id].conns[action.target] = false;
+      }
+      return { ...state };
+    }
+    if (action.type === 'update') {
+      for (const conn of Object.keys(state.nodes[action.id].conns)) {
+        state.nodes[conn].conns[action.id] = action.active;
+      }
+      return { ...state };
+    }
+    throw 'Unknown action for state was dispatched!';
+  }
+
+  const [state, dispatch] = useReducer(reduce, { nodes: {} });
+
   const context = {
+    state,
+    dispatch,
     wires,
     setWires,
     node,
