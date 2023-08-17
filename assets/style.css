@@ -2,7 +2,7 @@
   --full-width: 1000px;
 }
 
-:root, :root.light {
+:root, :root[data-theme="light"] {
   --bg-background: #FFF;
   --bg-code: #000;
   --bg-mark: #CCC;
@@ -17,7 +17,7 @@
   --sb-active: #959595;
 }
 
-:root.dark {
+:root[data-theme="dark"] {
   --bg-background: #1F1F1F;
   --bg-code: #000;
   --bg-mark: #424242;

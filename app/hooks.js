@@ -25,7 +25,7 @@
 
 import { React } from './deps.js';
 
-const { useEffect, useRef, useReducer } = React;
+const { useEffect, useState, useRef, useReducer } = React;
 
 /**
  * Calls the given function once.
@@ -108,4 +108,24 @@ export function useFetch(url, options) {
   }, [url]);
 
   return state;
+}
+
+export function useTheme() {
+  const [theme, setTheme] = useState('light');
+
+  useEffectOnce(() => {
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.attributeName === 'data-theme') {
+          setTheme(document.documentElement.getAttribute('data-theme'));
+        }
+      }
+    });
+    observer.observe(document.documentElement, { attributes: true });
+    return () => {
+      observer.disconnect();
+    };
+  });
+
+  return theme;
 }
