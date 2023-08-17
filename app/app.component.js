@@ -29,8 +29,8 @@ export default function AppComponent() {
       return;
     }
     const bounds = event.target.getBoundingClientRect();
-    const x = event.clientX - bounds.left - canvasRef.current.origin.x;
-    const y = event.clientY - bounds.top - canvasRef.current.origin.y;
+    const x = (event.clientX - bounds.left) / canvasRef.current.zoom - canvasRef.current.origin.x;
+    const y = (event.clientY - bounds.top) / canvasRef.current.zoom - canvasRef.current.origin.y;
     setNodes([
       ...nodes,
       createNode(x, y),
