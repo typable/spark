@@ -13,13 +13,12 @@ export default forwardRef(function CanvasComponent(props, ref) {
   const [pointer, setPointer] = useState(null);
   const originRef = useStateRef(origin);
   const zoomRef = useStateRef(zoom);
-  const canvasRef = useRef(null);
   const viewRef = useRef(null);
 
   useEffectOnce(() => {
-    canvasRef.current.addEventListener('wheel', onScroll, { passive: false });
+    window.addEventListener('wheel', onScroll, { passive: false });
     return () => {
-      canvasRef.current.removeEventListener('wheel', onScroll);
+      window.removeEventListener('wheel', onScroll);
     };
   });
 
@@ -89,7 +88,6 @@ export default forwardRef(function CanvasComponent(props, ref) {
   return html`
     <app-canvas
       $props=${props}
-      ref=${canvasRef}
       on:pointerdown=${onPointerDown}
       on:pointerup=${onPointerUp}
       on:pointerleave=${onPointerLeave}
