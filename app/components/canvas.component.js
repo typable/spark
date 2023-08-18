@@ -1,13 +1,14 @@
 // @ts-check
 
-import { React, html } from '../deps.js';
+import { React, global, html } from '../deps.js';
 import { useEffectOnce, useStateRef } from '../hooks.js';
 
-const { forwardRef, useState, useRef, useImperativeHandle } = React;
+const { forwardRef, useState, useRef, useContext, useImperativeHandle } = React;
 
 const SIZE = 20;
 
 export default forwardRef(function CanvasComponent(props, ref) {
+  const { setCursor } = useContext(global);
   const [zoom, setZoom] = useState(1);
   const [origin, setOrigin] = useState({ x: 0, y: 0 });
   const [pointer, setPointer] = useState(null);
@@ -41,8 +42,11 @@ export default forwardRef(function CanvasComponent(props, ref) {
   }
 
   function onPointerMove(event) {
+    const bounds = viewRef.current.getBoundingClientRect();
+    const x = (event.clientX - bounds.x) / zoom - origin.x;
+    const y = (event.clientY - bounds.y) / zoom - origin.y;
+    setCursor({ x, y });
     if (pointer) {
-      const bounds = viewRef.current.getBoundingClientRect();
       const x = (event.clientX - bounds.x) / zoom - pointer.dx;
       const y = (event.clientY - bounds.y) / zoom - pointer.dy;
       setOrigin({ x, y });

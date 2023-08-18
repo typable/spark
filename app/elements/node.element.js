@@ -42,7 +42,7 @@ export default function NodeElement(props) {
     ]);
     dispatch({ type: 'connect', id: id, target: node.id });
     dispatch({ type: 'connect', id: node.id, target: id });
-    setNode(null);
+    setNode({ ...props, id });
   }
 
   function isActive() {
@@ -56,6 +56,24 @@ export default function NodeElement(props) {
   }
 
   return html`
+    <style>
+
+      circle.wire-indicator {
+        animation: rotate 5s linear infinite;
+        transform-box: fill-box;
+        transform-origin: 8px 8px;
+      }
+
+      @keyframes rotate {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    
+    </style>
     <circle
       cx=${props?.x ?? 0}
       cy=${props?.y ?? 0}
@@ -66,5 +84,18 @@ export default function NodeElement(props) {
       on:click=${doWire}
     >
     </circle>
+    ${node?.id === id ? html`
+      <circle
+        class="wire-indicator"
+        cx=${props?.x ?? 0}
+        cy=${props?.y ?? 0}
+        r="8"
+        fill="none"
+        stroke="black"
+        stroke-width="1"
+        stroke-dasharray="5"
+      >
+      </circle>
+    ` : ''}
   `;
 }

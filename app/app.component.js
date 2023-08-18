@@ -2,18 +2,19 @@
 
 import { React, html } from './deps.js';
 
-const { useState, useRef, useReducer } = React;
+const { useState, useRef, useReducer, useMemo } = React;
 
 export default function AppComponent() {
   const e1 = createElement('switch', 220, 220);
   const e2 = createElement('button', 220, 280);
   const e3 = createElement('clock', 220, 340);
+
+  const [cursor, setCursor] = useState(null);
   
   const elements = [e1, e2, e3];
   const [wires, setWires] = useState([]);
-
   const [nodes, setNodes] = useState([]);
-  const canvasRef = useRef();
+  const canvasRef = useRef(null);
 
   const [node, setNode] = useState(null);
 
@@ -44,6 +45,8 @@ export default function AppComponent() {
   const context = {
     state,
     dispatch,
+    cursor,
+    setCursor,
     wires,
     setWires,
     node,
@@ -63,6 +66,28 @@ export default function AppComponent() {
     ]);
   }
 
+  const wire = useMemo(() => {
+    if (node && cursor) {
+      const start = { ...node };
+      const end = cursor;
+      if (start.parent) {
+        start.x += start.parent.x;
+        start.y += start.parent.y;
+      }
+      return html`
+        <path
+          d="M ${start.x} ${start.y} L ${end.x} ${end.y}"
+          fill="none"
+          stroke="black"
+          stroke-width="1"
+          style=${{ 'pointer-events': 'none' }}
+        >
+        </path>
+      `;
+    }
+    return '';
+  }, [node, cursor]);
+
   return html`
     <ctx:global value=${context}>
       <main>
@@ -70,6 +95,7 @@ export default function AppComponent() {
           ${wires.map((wire) => html`
             <element:wire $props=${wire}></element:wire>
           `)}
+          ${wire}
           ${elements.map((element) => {
             switch (element.type) {
               case 'switch':
