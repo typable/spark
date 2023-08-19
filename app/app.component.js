@@ -1,6 +1,7 @@
 // @ts-check
 
 import { React, html } from './deps.js';
+import { useEffectOnce, useStateRef } from './hooks.js';
 
 const { useState, useRef, useReducer, useMemo } = React;
 
@@ -17,6 +18,14 @@ export default function AppComponent() {
   const canvasRef = useRef(null);
 
   const [node, setNode] = useState(null);
+  const nodeRef = useStateRef(node);
+
+  useEffectOnce(() => {
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  });
 
   function reduce(state, action) {
     if (action.type === 'create') {
@@ -64,6 +73,14 @@ export default function AppComponent() {
       ...nodes,
       createNode(x, y),
     ]);
+  }
+
+  function onKeyDown(event) {
+    if (event.key === 'Escape') {
+      if (nodeRef) {
+        setNode(null);
+      }
+    }
   }
 
   const wire = useMemo(() => {
