@@ -1,8 +1,10 @@
 // @ts-check
 
 import { html } from '../deps.js';
+import { useTheme } from '../hooks.js';
 
 export default function WireElement(props) {
+  const theme = useTheme();
 
   function evalPath() {
     const { start, end } = props ?? {};
@@ -13,7 +15,7 @@ export default function WireElement(props) {
     <path
       d=${evalPath()}
       fill="none"
-      stroke="black"
+      stroke="${theme.wire}"
       stroke-width="1"
     >
     </path>

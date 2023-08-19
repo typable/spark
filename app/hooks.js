@@ -24,6 +24,7 @@
  */
 
 import { React } from './deps.js';
+import THEMES from "./themes.js";
 
 const { useEffect, useState, useRef, useReducer } = React;
 
@@ -111,13 +112,25 @@ export function useFetch(url, options) {
 }
 
 export function useTheme() {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState(THEMES['light']);
 
   useEffectOnce(() => {
+    if (window.matchMedia) {
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        setTheme(THEMES['dark']);
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+        setTheme(THEMES[event.matches ? 'dark' : 'light']);
+      });
+    }
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         if (mutation.attributeName === 'data-theme') {
-          setTheme(document.documentElement.getAttribute('data-theme'));
+          const id = document.documentElement.getAttribute('data-theme');
+          const theme = THEMES[id];
+          if (theme) {
+            setTheme(theme);
+          }
         }
       }
     });

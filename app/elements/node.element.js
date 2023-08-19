@@ -1,6 +1,7 @@
 // @ts-check
 
 import { React, global, html } from '../deps.js';
+import { useTheme } from '../hooks.js';
 
 const { useState, useEffect, useContext } = React;
 
@@ -8,6 +9,7 @@ export default function NodeElement(props) {
   const [id, setId] = useState(new Date().getTime());
   const { wires, setWires, node, setNode } = useContext(global);
   const [active, setActive] = useState(props?.active ?? false);
+  const theme = useTheme();
 
   useEffect(() => {
     if (props?.source) {
@@ -50,8 +52,8 @@ export default function NodeElement(props) {
       cx=${props?.x ?? 0}
       cy=${props?.y ?? 0}
       r="4"
-      fill=${active ? 'black' : 'white'}
-      stroke="black"
+      fill=${active ? theme.node.active : theme.node.inactive}
+      stroke="${theme.node.border}"
       stroke-width="1"
       on:click=${doWire}
     >
