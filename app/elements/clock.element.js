@@ -1,7 +1,7 @@
 // @ts-check
 
 import { React, html } from '../deps.js';
-import { useStateRef } from '../hooks.js';
+import { useStateRef, useTheme } from '../hooks.js';
 
 const { useState, useEffect } = React;
 
@@ -9,6 +9,7 @@ export default function ClockElement(props) {
   const [enabled, setEnabled] = useState(false);
   const [active, setActive] = useState(false);
   const activeRef = useStateRef(active);
+  const theme = useTheme();
 
   useEffect(() => {
     let interval = null;
@@ -31,8 +32,8 @@ export default function ClockElement(props) {
         rx="1"
         width="40"
         height="40"
-        fill="#CCC"
-        stroke="black"
+        fill="${theme.element.background}"
+        stroke="${theme.element.border}"
         stroke-width="1"
         on:click=${() => setEnabled(!enabled)}
       >
@@ -42,8 +43,8 @@ export default function ClockElement(props) {
         y="${enabled ? 12 : 10}"
         width=${enabled ? 16 : 20}
         height=${enabled ? 16 : 20}
-        fill="#AAA"
-        stroke="black"
+        fill="${theme.element.action}"
+        stroke="${theme.element.border}"
         stroke-width="1"
         style=${{ 'pointer-events': 'none' }}
       >

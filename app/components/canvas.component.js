@@ -1,7 +1,7 @@
 // @ts-check
 
 import { React, html } from '../deps.js';
-import { useEffectOnce, useStateRef } from '../hooks.js';
+import { useEffectOnce, useStateRef, useTheme } from '../hooks.js';
 
 const { forwardRef, useState, useRef, useImperativeHandle } = React;
 
@@ -14,6 +14,7 @@ export default forwardRef(function CanvasComponent(props, ref) {
   const originRef = useStateRef(origin);
   const zoomRef = useStateRef(zoom);
   const viewRef = useRef(null);
+  const theme = useTheme();
 
   useEffectOnce(() => {
     window.addEventListener('wheel', onScroll, { passive: false });
@@ -86,6 +87,13 @@ export default forwardRef(function CanvasComponent(props, ref) {
   }, [viewRef, origin, zoom]);
 
   return html`
+    <style>
+
+      svg.canvas {
+        background-color: ${theme.background};
+      }
+    
+    </style>
     <app-canvas
       $props=${props}
       on:pointerdown=${onPointerDown}
@@ -93,7 +101,9 @@ export default forwardRef(function CanvasComponent(props, ref) {
       on:pointerleave=${onPointerLeave}
       on:pointermove=${onPointerMove}
     >
-      <svg>
+      <svg
+        class="canvas"
+      >
         <g transform="scale(${zoom})">
           <pattern
             id="pattern-circles"
@@ -108,7 +118,7 @@ export default forwardRef(function CanvasComponent(props, ref) {
               cx="${SIZE / 2}"
               cy="${SIZE / 2}"
               r="1"
-              fill="#DDD"
+              fill="${theme.grid}"
             >
             </circle>
           </pattern>
@@ -124,7 +134,7 @@ export default forwardRef(function CanvasComponent(props, ref) {
           <g transform="translate(${origin.x}, ${origin.y})">
             <path
               d="M -20 0 L 20 0 M 0 -20 L 0 20 M -6 0 a 6 6 0 1 1 0 1"
-              stroke="#888"
+              stroke="${theme.grid}"
               stroke-width="1"
               fill="none"
             >
