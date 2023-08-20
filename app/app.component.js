@@ -58,6 +58,14 @@ export default function AppComponent() {
                 return html`
                   <element:clock $props=${element}></element:clock>
                 `;
+              case 'lamp':
+                return html`
+                  <element:lamp $props=${element}></element:lamp>
+                `;
+              case 'segmentdisplay':
+                return html`
+                  <element:segmentdisplay $props=${element}></element:segmentdisplay>
+                `;
             }
           })}
           ${nodes.map((node) => html`

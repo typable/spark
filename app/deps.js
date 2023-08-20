@@ -11,6 +11,9 @@ import WireElement from "./elements/wire.element.js";
 import SwitchElement from './elements/switch.element.js';
 import ButtonElement from "./elements/button.element.js";
 import ClockElement from "./elements/clock.element.js";
+import LampElement from "./elements/lamp.element.js";
+import SegmentDisplayElement from "./elements/segment-display.element.js";
+
 
 const { dict } = figure(React.createElement);
 
@@ -29,6 +32,8 @@ const html = dict({
     switch: SwitchElement,
     button: ButtonElement,
     clock: ClockElement,
+    lamp: LampElement,
+    segmentdisplay: SegmentDisplayElement,
   },
 });
 
