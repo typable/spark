@@ -19,14 +19,14 @@ export default {
     grid: '#666',
     element: {
       border: '#000',
-      background: '#CCC',
-      action: '#AAA',
+      background: '#3b3b3b',
+      action: '#777777',
     },
     wire: '#000',
     node: {
       border: '#000',
       active: '#000',
-      inactive: '#FFF',
+      inactive: '#b7b7b7',
     },
   },
 }
