@@ -43,8 +43,8 @@ export default forwardRef(function CanvasComponent(props, ref) {
   function onPointerMove(event) {
     if (pointer) {
       const bounds = viewRef.current.getBoundingClientRect();
-      const x = (event.clientX - bounds.x) / zoom - pointer.dx;
-      const y = (event.clientY - bounds.y) / zoom - pointer.dy;
+      const x = Math.round((event.clientX - bounds.x) / zoom - pointer.dx);
+      const y = Math.round((event.clientY - bounds.y) / zoom - pointer.dy);
       setOrigin({ x, y });
     }
   }
@@ -57,8 +57,8 @@ export default forwardRef(function CanvasComponent(props, ref) {
           const bounds = viewRef.current.getBoundingClientRect();
           const dx = (event.clientX - bounds.x) / zoomRef.current - (event.clientX - bounds.x) / (zoomRef.current + 0.1);
           const dy = (event.clientY - bounds.y) / zoomRef.current - (event.clientY - bounds.y) / (zoomRef.current + 0.1);
-          const x = originRef.current.x - dx;
-          const y = originRef.current.y - dy;
+          const x = Math.round(originRef.current.x - dx);
+          const y = Math.round(originRef.current.y - dy);
           setOrigin({ x, y });
           setZoom(zoomRef.current + 0.1);
         }
@@ -68,8 +68,8 @@ export default forwardRef(function CanvasComponent(props, ref) {
           const bounds = viewRef.current.getBoundingClientRect();
           const dx = (event.clientX - bounds.x) / (zoomRef.current - 0.1) - (event.clientX - bounds.x) / zoomRef.current;
           const dy = (event.clientY - bounds.y) / (zoomRef.current - 0.1) - (event.clientY - bounds.y) / zoomRef.current;
-          const x = originRef.current.x + dx;
-          const y = originRef.current.y + dy;
+          const x = Math.round(originRef.current.x + dx);
+          const y = Math.round(originRef.current.y + dy);
           setOrigin({ x, y });
           setZoom(zoomRef.current - 0.1);
         }
