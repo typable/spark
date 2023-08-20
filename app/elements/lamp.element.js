@@ -33,15 +33,17 @@ export default function LampElement(props) {
       >
       </circle>
       <path
-        d="M 10 10 L 30 30 M 30 10 L 10 30"
+        d="M 9.5 9.5 L 30.5 30.5 M 30.5 9.5 L 9.5 30.5"
         fill="none"
         stroke="black"
         stroke-width="1"
       >
       </path>
       <element:node
-        x="40"
-        y="20"
+        x="${40}"
+        y="${20}"
+        parent=${props}
+        source="${true}"
         active=${active}
       >
       </element:node>
